@@ -8,6 +8,7 @@ import (
 )
 
 func TestSameDate(t *testing.T) {
+	t.Parallel()
 	require := require.New(t)
 
 	dr := NewDateRange("19700101", "19700101")
@@ -17,6 +18,7 @@ func TestSameDate(t *testing.T) {
 }
 
 func TestNegative(t *testing.T) {
+	t.Parallel()
 	assert := assert.New(t)
 
 	dr := NewDateRange("19700102", "19700101")
@@ -24,6 +26,7 @@ func TestNegative(t *testing.T) {
 }
 
 func TestSmallDateRange(t *testing.T) {
+	t.Parallel()
 	assert := assert.New(t)
 	require := require.New(t)
 
@@ -51,6 +54,7 @@ func TestSmallDateRange(t *testing.T) {
 }
 
 func TestLargeDateRange(t *testing.T) {
+	t.Parallel()
 	assert := assert.New(t)
 	require := require.New(t)
 
