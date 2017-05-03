@@ -29,9 +29,25 @@ func (dr *DateRange) AsList() []time.Time {
 	return ret
 }
 
+func (dr *DateRange) ContainsDate(t time.Time) bool {
+	d := date.FromTime(t)
+	if (dr.Start.Equals(d) || dr.Start.Before(d)) && dr.End.After(d) {
+		return true
+	}
+	return false
+}
+
 func NewDateRange(from string, to string) *DateRange {
-	start := date.FromTime(strptime.MustParse(from, "%Y%m%d"))
-	end := date.FromTime(strptime.MustParse(to, "%Y%m%d"))
+	str, err := strptime.Parse(from, "%Y%m%d")
+	if err != nil {
+		return nil
+	}
+	start := date.FromTime(str)
+	str, err = strptime.Parse(to, "%Y%m%d")
+	if err != nil {
+		return nil
+	}
+	end := date.FromTime(str)
 
 	if end.Time.Sub(start.Time) < 0 {
 		return nil

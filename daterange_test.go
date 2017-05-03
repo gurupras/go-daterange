@@ -2,6 +2,7 @@ package daterange
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -61,4 +62,48 @@ func TestLargeDateRange(t *testing.T) {
 	dr := NewDateRange("19700101", "20170101")
 	require.NotNil(dr)
 	assert.Equal(17167, len(dr.AsList()))
+}
+
+func TestInvalidDate(t *testing.T) {
+	t.Parallel()
+	require := require.New(t)
+
+	dr := NewDateRange("19700101", "now")
+	require.Nil(dr)
+}
+
+func TestBoundary(t *testing.T) {
+	t.Parallel()
+	require := require.New(t)
+
+	dr := NewDateRange("19700101", "20170101")
+	require.NotNil(dr)
+
+	// Check boundaries
+	d := time.Date(2017, 01, 01, 0, 0, 0, 0, time.UTC)
+	result := dr.ContainsDate(d)
+	require.False(result)
+
+}
+
+func TestContainsDate(t *testing.T) {
+	t.Parallel()
+	require := require.New(t)
+
+	dr := NewDateRange("19700101", "20170101")
+	require.NotNil(dr)
+
+	// Check boundaries
+	d := time.Date(2017, 01, 01, 0, 0, 0, 0, time.UTC)
+	result := dr.ContainsDate(d)
+	require.False(result)
+
+	d = time.Date(1970, 01, 01, 0, 0, 0, 0, time.UTC)
+	result = dr.ContainsDate(d)
+	require.True(result)
+
+	// Check something in between
+	d = time.Date(2000, 01, 01, 0, 0, 0, 0, time.UTC)
+	result = dr.ContainsDate(d)
+	require.True(result)
 }
